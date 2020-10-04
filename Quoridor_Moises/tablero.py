@@ -52,12 +52,14 @@ while not hecho:
                 for elemento in path:
                     data1.append(elemento[0])
                     data2.append(elemento[1])
-                data1b = []
-                data2b = []
-                path2 = a_star.a_star(grid, inicio2, final2)
-                for elemento2 in path2:
-                    data1b.append(elemento2[0])
-                    data2b.append(elemento2[1])
+                #data1b = []
+                #data2b = []
+                #path2 = a_star.a_star(grid, inicio2, final2)
+                #for elemento2 in path2:
+                #    data1b.append(elemento2[0])
+                #    data2b.append(elemento2[1])
+                print(data1)
+                print(data2)
             if evento.button == 3:
                 pos = pygame.mouse.get_pos()
                 columna = pos[0] // (LARGO + MARGEN)
@@ -67,14 +69,14 @@ while not hecho:
             if evento.key == pygame.K_r:
                grid[data1[x+1]][data2[x+1]] = 2
                x = x + 1
-               grid[data1b[xb + 1]][data2b[xb + 1]] = 3
-               xb = xb + 1
+               #grid[data1b[xb + 1]][data2b[xb + 1]] = 3
+               #xb = xb + 1
         elif evento.type == pygame.KEYUP:
             if evento.key == pygame.K_r:
                grid[data1[y+1]][data2[y+1]] = 0
                y = y + 1
-               grid[data1b[yb + 1]][data2b[yb + 1]] = 0
-               yb = yb + 1
+               #grid[data1b[yb + 1]][data2b[yb + 1]] = 0
+               #yb = yb + 1
     for fila in range(10):
         for columna in range(10):
             color = BLANCO

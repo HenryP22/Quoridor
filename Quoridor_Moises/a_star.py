@@ -15,12 +15,9 @@ def a_star(matriz, inicio, final):
     inicio_node.g = inicio_node.h = inicio_node.f = 0
     final_node = Node(None, final)
     final_node.g = final_node.h = final_node.f = 0
-
     open_list = []
     closed_list = []
-
     open_list.append(inicio_node)
-
     while len(open_list) > 0:
         current_node = open_list[0]
         current_index = 0
