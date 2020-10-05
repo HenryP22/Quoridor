@@ -1,0 +1,67 @@
+LEFT = 1
+RIGHT = 3
+
+current1 = [4,0]
+current2 = [4,8]
+
+DIMENSION_VENTANA = [555, 555]
+pantalla = pygame.display.set_mode(DIMENSION_VENTANA)
+
+pygame.display.set_caption("Quoridor")
+turno = 1
+hecho = False
+reloj = pygame.time.Clock()
+while not hecho:
+    for evento in pygame.event.get():
+        if evento.type == pygame.QUIT:
+            hecho = True
+        elif evento.type == pygame.MOUSEBUTTONDOWN:
+            if evento.button == LEFT and turno == 1:
+                grid[current1[0]][current1[1]] = 0
+                turno = 2
+                pos = pygame.mouse.get_pos()
+                columna = pos[0] // (LARGO + MARGEN)
+                fila = pos[1] // (ALTO + MARGEN)
+                grid[fila][columna] = 1
+                current1 = [fila,columna]
+                print("Click ", pos, "Coordenadas de la retícula: ", fila, columna)
+##            if evento.button == RIGHT and turno ==2:
+##                grid[current2[0]][current2[1]] = 0
+##                turno = 1
+##                pos = pygame.mouse.get_pos()
+##                columna = pos[0] // (LARGO + MARGEN)
+##                fila = pos[1] // (ALTO + MARGEN)
+##                grid[fila][columna] = 2
+##                current2 = [fila,columna]
+##                print("Click ", pos, "Coordenadas de la retícula: ", fila, columna)
+        if turno == 2:
+            grid[current2[0]][current2[1]] = 0
+            turno = 1
+            current2[1] -= 1
+            if current1[1] <= current2[1] and current1[0] == current2[0]:
+                current2[0] += random.choice([-1,1])
+            if current1[1] > current2[1]:
+                if current2[0] > 4:
+                    current2[0] -= 1
+                elif current2[0] < 4:
+                    current2[0] +=1
+                
+
+            grid[current2[0]][current2[1]] = 2
+    if current1[1] == 8 or current2[1] == 0:
+        hecho = True
+
+    pantalla.fill(NEGRO)
+    for fila in range(9):
+        for columna in range(9):
+            if grid[fila][columna] == 1:
+                color = VERDE
+            if grid[fila][columna] == 2:
+                color = AZUL
+            if grid[fila][columna] == 0:
+                color = BLANCO
+            
+            pygame.draw.rect(pantalla,color,[(MARGEN + LARGO) * columna + MARGEN,(MARGEN + ALTO) * fila + MARGEN,LARGO,ALTO])
+    reloj.tick(60)
+    pygame.display.flip()
+pygame.quit()
