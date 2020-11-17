@@ -44,8 +44,9 @@ def a_star(matriz, inicio, final):
                     len(matriz[len(matriz) - 1]) - 1) or node_posicion[1] < 0:
                 continue
 
-            if matriz[node_posicion[0]][node_posicion[1]] != 0:
+            if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != 2:
                 continue
+
 
             new_node = Node(current_node, node_posicion)
             hijos.append(new_node)

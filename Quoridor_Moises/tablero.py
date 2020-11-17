@@ -1,5 +1,6 @@
 import pygame,random
 import a_star
+import time
 NEGRO = (0, 0, 0)
 BLANCO = (255, 255, 255)
 VERDE = (0, 255, 0)
@@ -33,6 +34,8 @@ inicio2 = (5,9)
 final2 = (5,1)
 x = 0
 y = -1
+data1 = []
+data2 = []
 pygame.init()
 DIMENSION_VENTANA = [555, 555]
 pantalla = pygame.display.set_mode(DIMENSION_VENTANA)
@@ -40,26 +43,26 @@ pygame.display.set_caption("Quoridor")
 cont = 0
 hecho = False
 reloj = pygame.time.Clock()
+
+class algoritmo() :
+    def __init__(self,grid,inicio,final):
+        self.grid = grid
+        self.inicio = inicio
+        self.final = final
+    def a_star(self):
+        data1[:] = []
+        data2[:] = []
+        path = a_star.a_star(self.grid,self.inicio,self.final)
+        for elemento in path:
+            data1.append(elemento[0])
+            data2.append(elemento[1])
+        return data1,data2
+
 while not hecho:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
             hecho = True
         elif evento.type == pygame.MOUSEBUTTONDOWN:
-            if evento.button == 1:
-                data1 = []
-                data2 = []
-                path = a_star.a_star(grid, inicio, final)
-                for elemento in path:
-                    data1.append(elemento[0])
-                    data2.append(elemento[1])
-                #data1b = []
-                #data2b = []
-                #path2 = a_star.a_star(grid, inicio2, final2)
-                #for elemento2 in path2:
-                #    data1b.append(elemento2[0])
-                #    data2b.append(elemento2[1])
-                print(data1)
-                print(data2)
             if evento.button == 3:
                 pos = pygame.mouse.get_pos()
                 columna = pos[0] // (LARGO + MARGEN)
@@ -67,16 +70,9 @@ while not hecho:
                 grid[fila][columna] = 1
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_r:
-               grid[data1[x+1]][data2[x+1]] = 2
-               x = x + 1
-               #grid[data1b[xb + 1]][data2b[xb + 1]] = 3
-               #xb = xb + 1
-        elif evento.type == pygame.KEYUP:
-            if evento.key == pygame.K_r:
-               grid[data1[y+1]][data2[y+1]] = 0
-               y = y + 1
-               #grid[data1b[yb + 1]][data2b[yb + 1]] = 0
-               #yb = yb + 1
+                grid[data1[x + 1]][data2[x + 1]] = 2
+                grid[data1[x]][data2[x]] = 0
+                x = x + 1
     for fila in range(10):
         for columna in range(10):
             color = BLANCO
@@ -87,6 +83,10 @@ while not hecho:
             if grid[fila][columna] == 3:
                 color = ROJO
             pygame.draw.rect(pantalla,color,[(MARGEN + LARGO) * columna + MARGEN,(MARGEN + ALTO) * fila + MARGEN,LARGO,ALTO])
+    Recorrido = algoritmo(grid, inicio, final)
+    path = Recorrido.a_star()
+    data1 = path[0]
+    data2 = path[1]
     reloj.tick(60)
     pygame.display.flip()
 pygame.quit()
