@@ -24,10 +24,10 @@ grid = [
           ]
 inicio = (5,0)
 final = (5,9)
-x = 0
-y = -1
+turno = 0
 data1 = []
 data2 = []
+x = 0
 pygame.init()
 DIMENSION_VENTANA = [555, 555]
 pantalla = pygame.display.set_mode(DIMENSION_VENTANA)
@@ -50,6 +50,15 @@ class algoritmo() :
             data1.append(elemento[0])
             data2.append(elemento[1])
         return data1,data2
+class movimientoBot():
+    def __init__(self,grid,data1,data2):
+        self.grid = grid
+        self.data1 = data1
+        self.data2 = data2
+    def movimiento(self):
+        self.grid[self.data1[x+1]][self.data2[x+1]] = 4
+        self.grid[self.data1[x]][self.data2[x]] = 0
+        return 2
 while not hecho:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
@@ -61,35 +70,36 @@ while not hecho:
                 fila = pos[1] // (ALTO + MARGEN)
                 if(grid[fila][columna] == 0) :
                     grid[fila][columna] = 1
+                    turno = 1
         elif evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_r:
-                grid[data1[x + 1]][data2[x + 1]] = 4
-                grid[data1[x]][data2[x]] = 0
-                x = x + 1
             if evento.key == pygame.K_w:
-                if (grid[posicionJugador[0]-1][posicionJugador[1]] != 1):
+                if (grid[posicionJugador[0]-1][posicionJugador[1]] != 1 and grid[posicionJugador[0] - 1][posicionJugador[1]] != 4):
                     if (posicionJugador[0] > 0):
                         grid[posicionJugador[0]-1][posicionJugador[1]] = 3
                         grid[posicionJugador[0]][posicionJugador[1]] = 0
                         posicionJugador = (posicionJugador[0]-1,posicionJugador[1])
+                turno = 1
             if evento.key == pygame.K_s:
-                if (grid[posicionJugador[0] + 1][posicionJugador[1]] != 1):
+                if (grid[posicionJugador[0] + 1][posicionJugador[1]] != 1 and grid[posicionJugador[0] + 1][posicionJugador[1]] != 4):
                     if (posicionJugador[0] < 9):
                         grid[posicionJugador[0]+1][posicionJugador[1]] = 3
                         grid[posicionJugador[0]][posicionJugador[1]] = 0
                         posicionJugador = (posicionJugador[0]+1, posicionJugador[1])
+                turno = 1
             if evento.key == pygame.K_d:
-                if (grid[posicionJugador[0]][posicionJugador[1] + 1] != 1):
+                if (grid[posicionJugador[0]][posicionJugador[1] + 1] != 1 and grid[posicionJugador[0]][posicionJugador[1] + 1] != 4):
                     if (posicionJugador[1] < 9):
                         grid[posicionJugador[0]][posicionJugador[1]+1] = 3
                         grid[posicionJugador[0]][posicionJugador[1]] = 0
                         posicionJugador = (posicionJugador[0], posicionJugador[1]+1)
+                turno = 1
             if evento.key == pygame.K_a:
-                if (grid[posicionJugador[0]][posicionJugador[1] - 1] != 1):
+                if (grid[posicionJugador[0]][posicionJugador[1] - 1] != 1 and grid[posicionJugador[0]][posicionJugador[1] - 1] != 4):
                     if (posicionJugador[1] > 0):
                         grid[posicionJugador[0]][posicionJugador[1]-1] = 3
                         grid[posicionJugador[0]][posicionJugador[1]] = 0
                         posicionJugador = (posicionJugador[0], posicionJugador[1] - 1)
+                turno = 1
     for fila in range(10):
         for columna in range(10):
             color = BLANCO
@@ -108,6 +118,10 @@ while not hecho:
     data2 = path[1]
     grid[5][0] = 2
     grid[5][9] = 2
+    if (turno == 1):
+        Movimiento = movimientoBot(grid,data1,data2)
+        turno = Movimiento.movimiento()
+        x = x + 1
     reloj.tick(60)
     pygame.display.flip()
 pygame.quit()
