@@ -10,7 +10,7 @@ class Node():
         return self.posicion == other.posicion
 
 
-def a_star(matriz, inicio, final):
+def a_star(matriz, inicio, final,jugador):
     inicio_node = Node(None, inicio)
     inicio_node.g = inicio_node.h = inicio_node.f = 0
     final_node = Node(None, final)
@@ -44,7 +44,7 @@ def a_star(matriz, inicio, final):
                     len(matriz[len(matriz) - 1]) - 1) or node_posicion[1] < 0:
                 continue
 
-            if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != 2:
+            if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador and matriz[node_posicion[0]][node_posicion[1]] != (jugador+2):
                 continue
 
 

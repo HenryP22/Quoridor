@@ -1,15 +1,13 @@
 import pygame,random
 import a_star
 import time
-NEGRO = (0, 0, 0)
+NARANJA = (255, 128, 0)
 BLANCO = (255, 255, 255)
 VERDE = (0, 255, 0)
 ROJO = (255, 0, 0)
 AZUL = (14, 45, 99)
-
 LARGO = 50
 ALTO =  50
-
 MARGEN = 5
 
 grid = [
@@ -24,14 +22,8 @@ grid = [
             [0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0]
           ]
-grid[5][0] = 2
-grid[5][9] = 3
-xb = 0
-yb = -1
 inicio = (5,0)
-final = (5,8)
-inicio2 = (5,9)
-final2 = (5,1)
+final = (5,9)
 x = 0
 y = -1
 data1 = []
@@ -43,21 +35,21 @@ pygame.display.set_caption("Quoridor")
 cont = 0
 hecho = False
 reloj = pygame.time.Clock()
-
+posicionJugador = final
 class algoritmo() :
-    def __init__(self,grid,inicio,final):
+    def __init__(self,grid,inicio,final,jugador):
         self.grid = grid
         self.inicio = inicio
         self.final = final
+        self.jugador = jugador
     def a_star(self):
         data1[:] = []
         data2[:] = []
-        path = a_star.a_star(self.grid,self.inicio,self.final)
+        path = a_star.a_star(self.grid,self.inicio,self.final,self.jugador)
         for elemento in path:
             data1.append(elemento[0])
             data2.append(elemento[1])
         return data1,data2
-
 while not hecho:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
@@ -67,12 +59,37 @@ while not hecho:
                 pos = pygame.mouse.get_pos()
                 columna = pos[0] // (LARGO + MARGEN)
                 fila = pos[1] // (ALTO + MARGEN)
-                grid[fila][columna] = 1
+                if(grid[fila][columna] == 0) :
+                    grid[fila][columna] = 1
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_r:
-                grid[data1[x + 1]][data2[x + 1]] = 2
+                grid[data1[x + 1]][data2[x + 1]] = 4
                 grid[data1[x]][data2[x]] = 0
                 x = x + 1
+            if evento.key == pygame.K_w:
+                if (grid[posicionJugador[0]-1][posicionJugador[1]] != 1):
+                    if (posicionJugador[0] > 0):
+                        grid[posicionJugador[0]-1][posicionJugador[1]] = 3
+                        grid[posicionJugador[0]][posicionJugador[1]] = 0
+                        posicionJugador = (posicionJugador[0]-1,posicionJugador[1])
+            if evento.key == pygame.K_s:
+                if (grid[posicionJugador[0] + 1][posicionJugador[1]] != 1):
+                    if (posicionJugador[0] < 9):
+                        grid[posicionJugador[0]+1][posicionJugador[1]] = 3
+                        grid[posicionJugador[0]][posicionJugador[1]] = 0
+                        posicionJugador = (posicionJugador[0]+1, posicionJugador[1])
+            if evento.key == pygame.K_d:
+                if (grid[posicionJugador[0]][posicionJugador[1] + 1] != 1):
+                    if (posicionJugador[1] < 9):
+                        grid[posicionJugador[0]][posicionJugador[1]+1] = 3
+                        grid[posicionJugador[0]][posicionJugador[1]] = 0
+                        posicionJugador = (posicionJugador[0], posicionJugador[1]+1)
+            if evento.key == pygame.K_a:
+                if (grid[posicionJugador[0]][posicionJugador[1] - 1] != 1):
+                    if (posicionJugador[1] > 0):
+                        grid[posicionJugador[0]][posicionJugador[1]-1] = 3
+                        grid[posicionJugador[0]][posicionJugador[1]] = 0
+                        posicionJugador = (posicionJugador[0], posicionJugador[1] - 1)
     for fila in range(10):
         for columna in range(10):
             color = BLANCO
@@ -82,11 +99,15 @@ while not hecho:
                 color = VERDE
             if grid[fila][columna] == 3:
                 color = ROJO
+            if grid[fila][columna] == 4:
+                color = NARANJA
             pygame.draw.rect(pantalla,color,[(MARGEN + LARGO) * columna + MARGEN,(MARGEN + ALTO) * fila + MARGEN,LARGO,ALTO])
-    Recorrido = algoritmo(grid, inicio, final)
+    Recorrido = algoritmo(grid, inicio, final,2)
     path = Recorrido.a_star()
     data1 = path[0]
     data2 = path[1]
+    grid[5][0] = 2
+    grid[5][9] = 2
     reloj.tick(60)
     pygame.display.flip()
 pygame.quit()
