@@ -74,17 +74,18 @@ while not hecho:
                 color = NARANJA
             pygame.draw.rect(pantalla,color,[(MARGEN + LARGO) * (columna) + MARGEN,(MARGEN + ALTO) * fila + MARGEN,LARGO,ALTO])
 
-    Recorrido = bot.algoritmo(grid, inicio, final,2)
+    grid[5][0] = 2
+    grid[5][11] = 2
+    Recorrido = bot.algoritmo(grid, inicio, final, 2)
     path = Recorrido.a_star()
     data1 = path[0]
     data2 = path[1]
-    grid[5][0] = 2
-    grid[5][11] = 2
     movimiento = jugador.movimientoJugador(grid, posicionJugador)
     if (turno == 1):
         Movimiento = bot.movimientoBot(grid,data1,data2,x)
-        turno = Movimiento.movimiento()
-        x = x + 1
+        Movimiento.movimiento()
+        inicio = Movimiento.movimiento()
+        turno = 2
     reloj.tick(60)
     pygame.display.flip()
 pygame.quit()

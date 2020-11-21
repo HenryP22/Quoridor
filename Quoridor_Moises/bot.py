@@ -25,4 +25,4 @@ class movimientoBot():
     def movimiento(self):
         self.grid[self.data1[self.x+1]][self.data2[self.x+1]] = 4
         self.grid[self.data1[self.x]][self.data2[self.x]] = 0
-        return 2
+        return (self.data1[self.x+1],self.data2[self.x+1])
