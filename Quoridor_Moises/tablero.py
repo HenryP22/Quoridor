@@ -26,16 +26,17 @@ grid = [
             [0,0,0,0,0,0,0,0,0,0,0,0]
           ]
 inicio = (5,0)
+finalJugador = (5,0)
 final = (5,11)
 turno = 0
 pygame.init()
 DIMENSION_VENTANA = [665,665]
 pantalla = pygame.display.set_mode(DIMENSION_VENTANA)
 pygame.display.set_caption("Quoridor")
-cont = 0
 posicionJugador = final
 hecho = False
 reloj = pygame.time.Clock()
+
 while not hecho:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
@@ -81,11 +82,13 @@ while not hecho:
     data1 = path[0]
     data2 = path[1]
     movimiento = jugador.movimientoJugador(grid, posicionJugador)
-    if (turno == 1):
+    if turno == 1 :
         Movimiento = bot.movimientoBot(grid,data1,data2,x)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
         turno = 2
+    if(posicionJugador == finalJugador or inicio == final):
+        pygame.quit()
     reloj.tick(60)
     pygame.display.flip()
 pygame.quit()
