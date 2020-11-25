@@ -146,7 +146,7 @@ while not hecho:
     data2 = path[1]
     movimiento = jugador.movimientoJugador(grid, posicionJugador)
     if turno == 1 :
-        Movimiento = bot.movimientoBot(grid,data1,data2,x)
+        Movimiento = bot.movimientoBot(grid,data1,data2,x,4)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
         turno = 2
