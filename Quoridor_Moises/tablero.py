@@ -28,8 +28,8 @@ grid = [
             [0,0,0,0,0,0,0,0,0,0,0,0,0]
           ]
 inicio = (6,0)
-finalJugador = (5,0)
-final = (5,11)
+finalJugador = (6,0)
+final = (6,12)
 turno = 0
 pygame.init()
 DIMENSION_VENTANA = [600,600]
@@ -61,7 +61,6 @@ while not hecho:
                     if  columna %2 != 0 and fila%2!=0: continue
                     grid[fila][columna] = 1
                     turno = 1
-                    print(columna, fila)
 
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_w:
@@ -88,6 +87,7 @@ while not hecho:
             if grid[fila][columna] == 4:
                 color = NARANJA
             if columna %2 != 0 and fila%2!=0:
+                grid[fila][columna] = 5
                 color = NEGRO
             if columna % 2 == 0:
                 if columna == 0:

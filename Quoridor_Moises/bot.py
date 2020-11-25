@@ -23,6 +23,6 @@ class movimientoBot():
         self.data2 = data2
         self.x = x
     def movimiento(self):
-        self.grid[self.data1[self.x+1]][self.data2[self.x+1]] = 4
+        self.grid[self.data1[self.x+2]][self.data2[self.x+2]] = 4
         self.grid[self.data1[self.x]][self.data2[self.x]] = 0
-        return (self.data1[self.x+1],self.data2[self.x+1])
+        return (self.data1[self.x+2],self.data2[self.x+2])
