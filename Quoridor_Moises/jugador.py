@@ -10,6 +10,8 @@ class movimientoJugador():
                 self.grid[self.posicionJugador[0]][self.posicionJugador[1]] = 0
                 self.posicionJugador = (self.posicionJugador[0] - 2, self.posicionJugador[1])
                 return self.posicionJugador
+        if(self.posicionJugador == None):
+            return self.posicionJugador
         else:
             return self.posicionJugador
     def movimientoAbajo(self):
@@ -19,6 +21,8 @@ class movimientoJugador():
                 self.grid[self.posicionJugador[0]][self.posicionJugador[1]] = 0
                 self.posicionJugador = (self.posicionJugador[0] + 2, self.posicionJugador[1])
                 return self.posicionJugador
+        if (self.posicionJugador == None):
+            return self.posicionJugador
         else:
             return self.posicionJugador
     def movimientoDerecha(self):
@@ -28,6 +32,8 @@ class movimientoJugador():
                 self.grid[self.posicionJugador[0]][self.posicionJugador[1]] = 0
                 self.posicionJugador = (self.posicionJugador[0], self.posicionJugador[1] + 2)
                 return self.posicionJugador
+        if (self.posicionJugador == None):
+            return self.posicionJugador
         else:
             return self.posicionJugador
     def movimientoIzquierda(self):
@@ -37,5 +43,7 @@ class movimientoJugador():
                 self.grid[self.posicionJugador[0]][self.posicionJugador[1]] = 0
                 self.posicionJugador = (self.posicionJugador[0], self.posicionJugador[1] - 2)
                 return self.posicionJugador
+        if (self.posicionJugador == None):
+            return self.posicionJugador
         else:
             return self.posicionJugador

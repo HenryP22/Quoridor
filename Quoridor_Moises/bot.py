@@ -16,6 +16,20 @@ class algoritmo() :
             data1.append(elemento[0])
             data2.append(elemento[1])
         return data1,data2
+class algoritmo2() :
+    def __init__(self,grid,inicio,final,jugador):
+        self.grid = grid
+        self.inicio = inicio
+        self.final = final
+        self.jugador = jugador
+    def a_star(self):
+        data1[:] = []
+        data2[:] = []
+        path = a_star.a_star(self.grid,self.inicio,self.final,self.jugador)
+        for elemento in path:
+            data1.append(elemento[0])
+            data2.append(elemento[1])
+        return data1,data2
 class movimientoBot():
     def __init__(self,grid,data1,data2,x,color):
         self.grid = grid

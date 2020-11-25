@@ -143,6 +143,7 @@ while not hecho:
     path = Recorrido.a_star()
     data1 = path[0]
     data2 = path[1]
+    print(path)
     movimiento = jugador.movimientoJugador(grid, posicionJugador)
     if turno == 1 :
         Movimiento = bot.movimientoBot(grid,data1,data2,x,4)
