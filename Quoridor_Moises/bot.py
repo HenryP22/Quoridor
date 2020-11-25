@@ -24,6 +24,6 @@ class movimientoBot():
         self.x = x
         self.color = color
     def movimiento(self):
-        self.grid[self.data1[self.x+2]][self.data2[self.x+2]] = color
+        self.grid[self.data1[self.x+2]][self.data2[self.x+2]] = self.color
         self.grid[self.data1[self.x]][self.data2[self.x]] = 0
         return (self.data1[self.x+2],self.data2[self.x+2])

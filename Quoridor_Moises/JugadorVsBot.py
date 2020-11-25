@@ -38,7 +38,6 @@ pygame.display.set_caption("Quoridor")
 posicionJugador = final
 hecho = False
 reloj = pygame.time.Clock()
-
 while not hecho:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
