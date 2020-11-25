@@ -1,5 +1,6 @@
 import pygame, random
 import bot
+import bot2
 import jugador
 import time
 
@@ -61,13 +62,17 @@ while not hecho:
                 if (grid[fila][columna] == 0 and columna % 2 != 0 or fila % 2 != 0):
                     if columna % 2 != 0 and fila % 2 != 0: continue
                     grid[fila][columna] = 1
-                    turno = 1
+                    
 
         elif evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_w:
+            if evento.key == pygame.K_a:
                 turno = 1
-            if evento.key == pygame.K_s:
+            if evento.key == pygame.K_w:
                 turno = 2
+            if evento.key == pygame.K_s:
+                turno = 3
+            if evento.key == pygame.K_d:
+                turno = 4
 
     for fila in range(13):
         for columna in range(13):
@@ -138,10 +143,11 @@ while not hecho:
                                           20,
                                           ALTO])
 
+
     Recorrido = bot.algoritmo(grid, inicio, final, 2)
     path = Recorrido.a_star()
 
-    Recorrido2 = bot.algoritmo2(grid, inicioBot, finalBot, 2)
+    Recorrido2 = bot2.algoritmo(grid, inicioBot, finalBot, 3)
     path2 = Recorrido2.a_star()
 
     data1 = path[0]
@@ -150,21 +156,24 @@ while not hecho:
     data3 = path2[0]
     data4 = path2[1]
 
-    print(path)
     if turno == 1:
         Movimiento = bot.movimientoBot(grid, data1, data2, x, 4)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
-        turno = 3
 
     if turno == 2:
-        Movimiento2 = bot.movimientoBot(grid, data3, data4, x, 3)
+        Movimiento2 = bot2.movimientoBot(grid, data3, data4, x, 3)
         Movimiento2.movimiento()
         inicioBot = Movimiento2.movimiento()
         turno = 3
 
     grid[6][0] = 2
     grid[6][12] = 2
+
+
+    if (inicio == final or inicioBot == finalBot) :
+       pygame.quit()
+
     reloj.tick(60)
     pygame.display.flip()
 pygame.quit()

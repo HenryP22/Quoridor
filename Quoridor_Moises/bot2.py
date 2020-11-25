@@ -2,7 +2,7 @@ import a_star
 
 data1 = []
 data2 = []
-class algoritmo() :
+class algoritmo():
     def __init__(self,grid,inicio,final,jugador):
         self.grid = grid
         self.inicio = inicio
