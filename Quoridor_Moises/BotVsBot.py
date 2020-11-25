@@ -35,7 +35,7 @@ pygame.init()
 DIMENSION_VENTANA = [600,600]
 pantalla = pygame.display.set_mode(DIMENSION_VENTANA)
 pygame.display.set_caption("Quoridor")
-inicioBot = final
+inicioBot = (6,12)
 hecho = False
 reloj = pygame.time.Clock()
 
@@ -131,20 +131,23 @@ while not hecho:
 
 
 
-    Recorrido = bot.algoritmo(grid, inicio, final, 2)
+    Recorrido = bot.algoritmo(grid,inicio,final,2)
     path = Recorrido.a_star()
+
     Recorrido2 = bot.algoritmo(grid,inicioBot,finalBot,2)
     path2 = Recorrido2.a_star()
+
     data1 = path[0]
     data2 = path[1]
+    
     data3 = path2[0]
     data4 = path2[1]
     if turno == 1:
-        Movimiento = bot.movimientoBot(grid,data1,data2,x)
+        Movimiento = bot.movimientoBot(grid,data1,data2,x,4)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
     if turno == 2:
-        Movimiento2 = bot.movimientoBot(grid,data3,data4,x)
+        Movimiento2 = bot.movimientoBot(grid,data3,data4,x,3)
         Movimiento2.movimiento()
         inicioBot = Movimiento2.movimiento()
     grid[6][0] = 2
