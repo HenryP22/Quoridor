@@ -10,6 +10,8 @@ VERDE = (0, 255, 0)
 ROJO = (255, 0, 0)
 NEGRO = (0, 0, 0)
 AZUL = (14, 45, 99)
+MORADO = (87,35,100)
+PLIM = (241, 148, 138)
 LARGO = 50
 ALTO = 50
 MARGEN = 5
@@ -33,6 +35,13 @@ inicio = (6, 0)
 finalBot = (6, 0)
 final = (6, 12)
 inicioBot = (6, 12)
+
+inicioBot2 = (0, 6)
+finalBot2 = (12, 6)
+
+inicioBot3 = (12, 6)
+finalBot3 = (0, 6)
+
 turno = 0
 pygame.init()
 DIMENSION_VENTANA = [600, 600]
@@ -67,8 +76,9 @@ while not hecho:
         elif evento.type == pygame.KEYDOWN:
             if evento.key == pygame.K_a:
                 turno = 1
-            if evento.key == pygame.K_w:
-                turno = 2
+            if evento.key == pygame.K_d:
+                turno = 3
+
 
     for fila in range(13):
         for columna in range(13):
@@ -81,6 +91,10 @@ while not hecho:
                 color = ROJO
             if grid[fila][columna] == 4:
                 color = NARANJA
+            if grid[fila][columna] == 6:
+                color = MORADO
+            if grid[fila][columna] == 7:
+                color = PLIM
             if columna % 2 != 0 and fila % 2 != 0:
                 grid[fila][columna] = 5
                 color = NEGRO
@@ -140,29 +154,34 @@ while not hecho:
                                           ALTO])
 
 
-    Recorrido = bot.algoritmo(grid, inicio, final, 2)
-    path = Recorrido.a_star()
 
     Recorrido2 = bot2.algoritmo(grid, inicioBot, finalBot, 3)
     path2 = Recorrido2.a_star()
 
-    data1 = path[0]
-    data2 = path[1]
+
 
     data3 = path2[0]
     data4 = path2[1]
 
+
+
     if turno == 1:
+        Recorrido = bot.algoritmo(grid, inicio, final, 2)
+        path = Recorrido.a_star()
+        data1 = path[0]
+        data2 = path[1]
         Movimiento = bot.movimientoBot(grid, data1, data2, x, 4)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
-        turno = 3
+        turno = 2
 
-    if turno == 2:
+    if turno == 3:
+        time.sleep(0.1)
         Movimiento2 = bot2.movimientoBot(grid, data3, data4, x, 3)
         Movimiento2.movimiento()
         inicioBot = Movimiento2.movimiento()
-        turno = 3
+        turno = 2
+
 
     grid[6][0] = 2
     grid[6][12] = 2

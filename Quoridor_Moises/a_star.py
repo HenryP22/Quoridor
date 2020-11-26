@@ -50,6 +50,12 @@ def a_star(matriz, inicio, final,jugador):
             if (jugador == 3):
                 if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador - 1 and matriz[node_posicion[0]][node_posicion[1]] != jugador:
                     continue
+            if (jugador == 6):
+                if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador - 4 and matriz[node_posicion[0]][node_posicion[1]] != jugador:
+                    continue
+            if (jugador == 7):
+                if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador - 5 and matriz[node_posicion[0]][node_posicion[1]] != jugador:
+                    continue
 
 
             new_node = Node(current_node, node_posicion)

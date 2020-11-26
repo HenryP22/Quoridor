@@ -149,6 +149,7 @@ while not hecho:
         Movimiento = bot.movimientoBot(grid,data1,data2,x,4)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
+        path = []
         turno = 2
     if(posicionJugador == finalJugador or inicio == final):
         pygame.quit()
