@@ -27,9 +27,65 @@ grid = [
             [0,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0,0,0,0]
           ]
-inicio = (6,0)
-finalJugador = (6,0)
-final = (6,12)
+
+def ValidMove(G,i,j,move):
+    if move == 'right':
+        return G[i][j-1] == 0
+    elif move == 'top':
+        return G[i+1][j] == 0
+    elif move == 'bot':
+        return G[i-1][j] == 0
+    elif move == 'left':
+        return G[i][j+1] == 0
+    else:
+        return True
+
+
+#directionsTop = [(0,-2,'left'),(-2,0,'top'),(2,0,'bot'),(0,2,'right')]
+directionsTop = [(0,2,'right'),(-2,0,'top'),(2,0,'bot'),(0,-2,'left')]
+#directionsBot = [(0,-2,'left'),(2,0,'bot'),(-2,0,'top'),(0,2,'right')]
+directionsBot = [(0,2,'right'),(2,0,'bot'),(-2,0,'top'),(0,-2,'left')]
+directions = directionsTop
+
+def findPath(G,start,end,directions):
+    n = len(G)
+    visited = [[False for x in range(13)] for y in range(13)]
+
+    if start[0] == 0:
+        directions = directionsBot
+    if start[0] == 12:
+        directions = directionsTop 
+    def dfs(i,j,move):
+        if not ValidMove(G,i,j,move):
+            return None
+        if (i,j) == end:
+            return [end]
+        
+        visited[i][j] = True
+        
+        for m,k,movement in directions:
+            
+            if i+m < 0 or i+m >= len(G):
+                continue
+            if j+k < 0 or j+k >= len(G):
+                continue
+
+            if not visited[i+m][j+k]:
+                newPath = dfs(i+m,j+k,movement)
+                if newPath:
+                    return [(i,j)] + newPath
+        
+
+        visited[i][j] = False
+        return None
+
+    return dfs(start[0],start[1],'')
+
+
+#print(findPath(grid,(6,0),(6,12),visited))
+inicio = (6,12)
+finalJugador = (6,12)
+final = (6,0)
 turno = 0
 pygame.init()
 DIMENSION_VENTANA = [600,600]
@@ -139,18 +195,48 @@ while not hecho:
 
     grid[6][0] = 2
     grid[6][12] = 2
-    Recorrido = bot.algoritmo(grid, inicio, final, 2)
-    path = Recorrido.a_star()
-    data1 = path[0]
-    data2 = path[1]
-    print(path)
+    recorrido = findPath(grid,inicio,final,directions)
+    data1 = []
+    data2 = []
+    for x in range(0,len(recorrido)):
+        data1.append(recorrido[x][0])
+    for x in range(0,len(recorrido)):
+        data2.append(recorrido[x][1])
     movimiento = jugador.movimientoJugador(grid, posicionJugador)
-    if turno == 1 :
-        Movimiento = bot.movimientoBot(grid,data1,data2,x,4)
-        Movimiento.movimiento()
-        inicio = Movimiento.movimiento()
-        path = []
+    opcionBot = random.randint(1,2)
+
+    if turno == 1:
+        #Movimiento = bot.movimientoBot(grid,data1,data2,x,4)
+        #Movimiento.movimiento()
+        #inicio = Movimiento.movimiento()
+        
+        if opcionBot == 2:
+            grid[data1[1]][data2[1]] = 4
+            grid[data1[0]][data2[0]] = 0
+            inicio = (data1[1],data2[1])
+            if inicio[0] == 0:
+                directions = directionsBot
+            if inicio[0] == 12:
+                directions = directionsTop
+
+        elif opcionBot == 1:
+            path = findPath(grid,posicionJugador,inicio,directions)
+            orig = path[0]
+            move = path[1]
+             
+            if orig[0] - move[0] == 2:
+                grid[orig[0]+1][orig[1]] = 1
+        #bot
+            if orig[0] - move[0] == -2:
+                grid[orig[0]-1][orig[1]] = 1
+        #right
+            if orig[1] - move[1] == -2:
+                grid[orig[0]][orig[1]+1] = 1
+
+       
         turno = 2
+        
+    
     if(posicionJugador == finalJugador or inicio == final):
         pygame.quit()
     reloj.tick(60)
