@@ -131,8 +131,10 @@ while not hecho:
             if evento.key == pygame.K_a:
                 posicionJugador = movimiento.movimientoIzquierda()
                 turno = 1
-    for fila in range(13):
-        for columna in range(13):
+
+    n = len(grid)
+    for fila in range(n):
+        for columna in range(n):
             color = BLANCO
             if grid[fila][columna] == 1:
                 color = AZUL

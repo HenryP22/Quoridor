@@ -2,6 +2,7 @@ import pygame, random
 import bot
 import bot2
 import bot3
+import bot4
 import jugador
 import time
 
@@ -30,7 +31,7 @@ grid = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 inicio = (6, 0)
 finalBot = (6, 0)
@@ -39,6 +40,9 @@ inicioBot = (6, 12)
 
 inicioBot2 = (0,6)
 finalBot2 = (12,6)
+
+inicioBot3 = (12,6)
+finalBot3 = (0,6)
 turno = 0
 pygame.init()
 DIMENSION_VENTANA = [600, 600]
@@ -132,9 +136,9 @@ while not hecho:
             if evento.key == pygame.K_4:
                 turno = 4
 
-
-    for fila in range(13):
-        for columna in range(13):
+    n = len(grid)
+    for fila in range(n):
+        for columna in range(n):
             color = BLANCO
             if grid[fila][columna] == 1:
                 color = AZUL
@@ -221,6 +225,11 @@ while not hecho:
     data5 = path3[0]
     data6 = path3[1]
 
+    Recorrido4 = bot4.algoritmo(grid, inicioBot3, finalBot3,7)
+    path4 = Recorrido4.a_star()
+    data7 = path4[0]
+    data8 = path4[1]
+
 
 
     if turno == 1:
@@ -231,7 +240,7 @@ while not hecho:
             Movimiento.movimiento()
             inicio = Movimiento.movimiento()
         elif (opcionBot == 2):
-            path = findPath(grid, inicioBot , finalBot, directions)
+            path = findPath(grid, inicioBot, finalBot, directions)
             orig = path[0]
             move = path[1]
             # top
@@ -276,11 +285,30 @@ while not hecho:
             inicioBot2 = Movimiento3.movimiento()
 
         elif (opcionBot == 2):
-            percy = random.randint(1, 2)
-            if (percy == 1):
-                path = findPath(grid, inicio, final, directions)
-            if (percy == 2):
-                path = findPath(grid, inicioBot, finalBot, directions)
+            path = findPath(grid, inicioBot3, finalBot3, directions)
+            orig = path[0]
+            move = path[1]
+            # top
+            if orig[0] - move[0] == 2:
+                grid[orig[0] + 1][orig[1]] = 1
+            # bot
+            if orig[0] - move[0] == -2:
+                grid[orig[0] - 1][orig[1]] = 1
+            # right
+            if orig[1] - move[1] == -2:
+                grid[orig[0]][orig[1] + 1] = 1
+
+        turno = 4
+
+    if turno == 4:
+        opcionBot = random.randint(1, 2)
+        if (opcionBot == 1):
+            Movimiento4 = bot4.movimientoBot(grid, data7, data8, x, 7)
+            Movimiento4.movimiento()
+            inicioBot3 = Movimiento4.movimiento()
+
+        elif (opcionBot == 2):
+            path = findPath(grid, inicioBot2, finalBot2, directions)
             orig = path[0]
             move = path[1]
             # top
@@ -295,8 +323,6 @@ while not hecho:
 
         turno = 1
 
-    grid[6][0] = 2
-    grid[6][12] = 2
 
 
     if (inicio == final or inicioBot == finalBot) :
