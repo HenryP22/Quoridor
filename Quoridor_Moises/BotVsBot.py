@@ -36,12 +36,6 @@ finalBot = (6, 0)
 final = (6, 12)
 inicioBot = (6, 12)
 
-inicioBot2 = (0, 6)
-finalBot2 = (12, 6)
-
-inicioBot3 = (12, 6)
-finalBot3 = (0, 6)
-
 turno = 0
 pygame.init()
 DIMENSION_VENTANA = [600, 600]
@@ -74,10 +68,14 @@ while not hecho:
 
 
         elif evento.type == pygame.KEYDOWN:
-            if evento.key == pygame.K_a:
+            if evento.key == pygame.K_1:
                 turno = 1
-            if evento.key == pygame.K_d:
+            if evento.key == pygame.K_2:
+                turno = 2
+            if evento.key == pygame.K_3:
                 turno = 3
+            if evento.key == pygame.K_4:
+                turno = 4
 
 
     for fila in range(13):
@@ -153,34 +151,29 @@ while not hecho:
                                           20,
                                           ALTO])
 
-
+    Recorrido = bot.algoritmo(grid, inicio, final, 2)
+    path = Recorrido.a_star()
+    data1 = path[0]
+    data2 = path[1]
 
     Recorrido2 = bot2.algoritmo(grid, inicioBot, finalBot, 3)
     path2 = Recorrido2.a_star()
-
-
-
     data3 = path2[0]
     data4 = path2[1]
 
 
 
     if turno == 1:
-        Recorrido = bot.algoritmo(grid, inicio, final, 2)
-        path = Recorrido.a_star()
-        data1 = path[0]
-        data2 = path[1]
         Movimiento = bot.movimientoBot(grid, data1, data2, x, 4)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
-        turno = 2
+        turno = 6
 
-    if turno == 3:
-        time.sleep(0.1)
+    if turno == 2:
         Movimiento2 = bot2.movimientoBot(grid, data3, data4, x, 3)
         Movimiento2.movimiento()
         inicioBot = Movimiento2.movimiento()
-        turno = 2
+        turno = 6
 
 
     grid[6][0] = 2

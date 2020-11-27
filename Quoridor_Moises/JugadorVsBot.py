@@ -2,6 +2,8 @@ import pygame,random
 import bot
 import jugador
 import time
+import math
+import a_star
 NARANJA = (255, 128, 0)
 BLANCO = (255, 255, 255)
 VERDE = (0, 255, 0)
@@ -38,6 +40,7 @@ pygame.display.set_caption("Quoridor")
 posicionJugador = final
 hecho = False
 reloj = pygame.time.Clock()
+
 while not hecho:
     for evento in pygame.event.get():
         if evento.type == pygame.QUIT:
@@ -139,18 +142,23 @@ while not hecho:
 
     grid[6][0] = 2
     grid[6][12] = 2
+
     Recorrido = bot.algoritmo(grid, inicio, final, 2)
     path = Recorrido.a_star()
     data1 = path[0]
     data2 = path[1]
-    print(path)
+
+
+
     movimiento = jugador.movimientoJugador(grid, posicionJugador)
-    if turno == 1 :
+
+
+    if turno == 1:
         Movimiento = bot.movimientoBot(grid,data1,data2,x,4)
         Movimiento.movimiento()
         inicio = Movimiento.movimiento()
-        path = []
         turno = 2
+        
     if(posicionJugador == finalJugador or inicio == final):
         pygame.quit()
     reloj.tick(60)

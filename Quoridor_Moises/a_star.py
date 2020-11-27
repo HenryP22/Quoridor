@@ -1,79 +1,110 @@
-class Node():
-    def __init__(self, padre=None, posicion=None):
-        self.padre = padre
-        self.posicion = posicion
+from warnings import warn
+import heapq
+
+
+class Node:
+    def __init__(self, parent=None, position=None):
+        self.parent = parent
+        self.position = position
+
         self.g = 0
         self.h = 0
         self.f = 0
 
     def __eq__(self, other):
-        return self.posicion == other.posicion
+        return self.position == other.position
+
+    def __repr__(self):
+        return f"{self.position} - g: {self.g} h: {self.h} f: {self.f}"
+
+    def __lt__(self, other):
+        return self.f < other.f
+
+    def __gt__(self, other):
+        return self.f > other.f
 
 
-def a_star(matriz, inicio, final,jugador):
-    inicio_node = Node(None, inicio)
-    inicio_node.g = inicio_node.h = inicio_node.f = 0
-    final_node = Node(None, final)
-    final_node.g = final_node.h = final_node.f = 0
+def return_path(current_node):
+    path = []
+    current = current_node
+    while current is not None:
+        path.append(current.position)
+        current = current.parent
+    return path[::-1]
+
+
+def astar(matriz, start, end,jugador):
+
+    start_node = Node(None, start)
+    start_node.g = start_node.h = start_node.f = 0
+    end_node = Node(None, end)
+    end_node.g = end_node.h = end_node.f = 0
+
     open_list = []
     closed_list = []
-    open_list.append(inicio_node)
-    while len(open_list) > 0:
-        current_node = open_list[0]
-        current_index = 0
-        for index, item in enumerate(open_list):
-            if item.f < current_node.f:
-                current_node = item
-                current_index = index
 
-        open_list.pop(current_index)
+    heapq.heapify(open_list)
+    heapq.heappush(open_list, start_node)
+
+    outer_iterations = 0
+    max_iterations = (len(matriz[0]) * len(matriz) // 2)
+
+    adjacent_squares = ((0, -1), (0, 1), (-1, 0), (1, 0),)
+
+    while len(open_list) > 0:
+        outer_iterations += 1
+
+        if outer_iterations > max_iterations:
+            return return_path(current_node)
+
+        current_node = heapq.heappop(open_list)
         closed_list.append(current_node)
 
-        if current_node == final_node:
-            path = []
-            current = current_node
-            while current is not None:
-                path.append(current.posicion)
-                current = current.padre
-            return path[::-1]
-        hijos = []
-        for nueva_posicion in [(0, -1), (0, 1), (-1, 0), (1, 0)]:
-            node_posicion = (current_node.posicion[0] + nueva_posicion[0], current_node.posicion[1] + nueva_posicion[1])
+        if current_node == end_node:
+            return return_path(current_node)
 
-            if node_posicion[0] > (len(matriz) - 1) or node_posicion[0] < 0 or node_posicion[1] > (
-                    len(matriz[len(matriz) - 1]) - 1) or node_posicion[1] < 0:
+        children = []
+
+        for new_position in adjacent_squares:
+            node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
+            if node_position[0] > (len(matriz) - 1) or node_position[0] < 0 or node_position[1] > (
+                    len(matriz[len(matriz) - 1]) - 1) or node_position[1] < 0:
                 continue
 
             if (jugador == 2):
-                if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador and matriz[node_posicion[0]][node_posicion[1]] != (jugador+2):
+                if matriz[node_position[0]][node_position[1]] != 0 and matriz[node_position[0]][
+                    node_position[1]] != jugador and matriz[node_position[0]][node_position[1]] != (jugador + 2):
                     continue
             if (jugador == 3):
-                if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador - 1 and matriz[node_posicion[0]][node_posicion[1]] != jugador:
+                if matriz[node_position[0]][node_position[1]] != 0 and matriz[node_position[0]][
+                    node_position[1]] != jugador - 1 and matriz[node_position[0]][node_position[1]] != jugador:
                     continue
             if (jugador == 6):
-                if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador - 4 and matriz[node_posicion[0]][node_posicion[1]] != jugador:
+                if matriz[node_position[0]][node_position[1]] != 0 and matriz[node_position[0]][
+                    node_position[1]] != jugador - 4 and matriz[node_position[0]][node_position[1]] != jugador:
                     continue
             if (jugador == 7):
-                if matriz[node_posicion[0]][node_posicion[1]] != 0 and matriz[node_posicion[0]][node_posicion[1]] != jugador - 5 and matriz[node_posicion[0]][node_posicion[1]] != jugador:
+                if matriz[node_position[0]][node_position[1]] != 0 and matriz[node_position[0]][
+                    node_position[1]] != jugador - 5 and matriz[node_position[0]][node_position[1]] != jugador:
                     continue
 
+            new_node = Node(current_node, node_position)
 
-            new_node = Node(current_node, node_posicion)
-            hijos.append(new_node)
+            children.append(new_node)
 
-        for hijo in hijos:
-            for closed_hijo in closed_list:
-                if hijo == closed_hijo:
-                    continue
+        for child in children:
+            if len([closed_child for closed_child in closed_list if closed_child == child]) > 0:
+                continue
 
-            hijo.g = current_node.g + 1
-            hijo.h = ((hijo.posicion[0] - final_node.posicion[0]) ** 2) + (
-                        (hijo.posicion[1] - final_node.posicion[1]) ** 2)
-            hijo.f = hijo.g + hijo.h
+            child.g = current_node.g + 1
+            child.h = ((child.position[0] - end_node.position[0]) ** 2) + (
+                        (child.position[1] - end_node.position[1]) ** 2)
+            child.f = child.g + child.h
 
-            for open_node in open_list:
-                if hijo == open_node and hijo.g > open_node.g:
-                    continue
+            if len([open_node for open_node in open_list if
+                    child.position == open_node.position and child.g > open_node.g]) > 0:
+                continue
 
-            open_list.append(hijo)
+            heapq.heappush(open_list, child)
 
+    return None

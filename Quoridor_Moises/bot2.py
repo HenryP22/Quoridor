@@ -11,7 +11,7 @@ class algoritmo():
     def a_star(self):
         data1[:] = []
         data2[:] = []
-        path = a_star.a_star(self.grid,self.inicio,self.final,self.jugador)
+        path = a_star.astar(self.grid,self.inicio,self.final,self.jugador)
         for elemento in path:
             data1.append(elemento[0])
             data2.append(elemento[1])
