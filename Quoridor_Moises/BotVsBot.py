@@ -1,6 +1,7 @@
 import pygame, random
 import bot
 import bot2
+import bot3
 import jugador
 import time
 
@@ -36,6 +37,8 @@ finalBot = (6, 0)
 final = (6, 12)
 inicioBot = (6, 12)
 
+inicioBot2 = (0,6)
+finalBot2 = (12,6)
 turno = 0
 pygame.init()
 DIMENSION_VENTANA = [600, 600]
@@ -43,6 +46,58 @@ pantalla = pygame.display.set_mode(DIMENSION_VENTANA)
 pygame.display.set_caption("Quoridor")
 hecho = False
 reloj = pygame.time.Clock()
+
+def ValidMove(G, i, j, move):
+    if move == 'right':
+        return G[i][j - 1] == 0
+    elif move == 'top':
+        return G[i + 1][j] == 0
+    elif move == 'bot':
+        return G[i - 1][j] == 0
+    elif move == 'left':
+        return G[i][j + 1] == 0
+    else:
+        return True
+
+directionsTop = [(0, 2, 'right'), (-2, 0, 'top'), (2, 0, 'bot'), (0, -2, 'left')]
+directionsBot = [(0, 2, 'right'), (2, 0, 'bot'), (-2, 0, 'top'), (0, -2, 'left')]
+directions = directionsTop
+
+
+def findPath(G, start, end, directions):
+    n = len(G)
+    visited = [[False for x in range(13)] for y in range(13)]
+
+    if start[0] == 0:
+        directions = directionsBot
+    if start[0] == 12:
+        directions = directionsTop
+
+    def dfs(i, j, move):
+        if not ValidMove(G, i, j, move):
+            return None
+        if (i, j) == end:
+            return [end]
+
+        visited[i][j] = True
+
+        for m, k, movement in directions:
+
+            if i + m < 0 or i + m >= len(G):
+                continue
+            if j + k < 0 or j + k >= len(G):
+                continue
+
+            if not visited[i + m][j + k]:
+                newPath = dfs(i + m, j + k, movement)
+                if newPath:
+                    return [(i, j)] + newPath
+
+        visited[i][j] = False
+        return None
+
+    return dfs(start[0], start[1], '')
+
 
 while not hecho:
     for evento in pygame.event.get():
@@ -161,20 +216,84 @@ while not hecho:
     data3 = path2[0]
     data4 = path2[1]
 
+    Recorrido3 = bot3.algoritmo(grid, inicioBot2, finalBot2,6)
+    path3 = Recorrido3.a_star()
+    data5 = path3[0]
+    data6 = path3[1]
+
 
 
     if turno == 1:
-        Movimiento = bot.movimientoBot(grid, data1, data2, x, 4)
-        Movimiento.movimiento()
-        inicio = Movimiento.movimiento()
-        turno = 6
+        time.sleep(0.2)
+        opcionBot = random.randint(1, 2)
+        if (opcionBot == 1):
+            Movimiento = bot.movimientoBot(grid, data1, data2, x, 4)
+            Movimiento.movimiento()
+            inicio = Movimiento.movimiento()
+        elif (opcionBot == 2):
+            path = findPath(grid, inicioBot , finalBot, directions)
+            orig = path[0]
+            move = path[1]
+            # top
+            if orig[0] - move[0] == 2:
+                grid[orig[0] + 1][orig[1]] = 1
+            # bot
+            if orig[0] - move[0] == -2:
+                grid[orig[0] - 1][orig[1]] = 1
+            # right
+            if orig[1] - move[1] == -2:
+                grid[orig[0]][orig[1] + 1] = 1
+        turno = 2
 
     if turno == 2:
-        Movimiento2 = bot2.movimientoBot(grid, data3, data4, x, 3)
-        Movimiento2.movimiento()
-        inicioBot = Movimiento2.movimiento()
-        turno = 6
+        opcionBot = random.randint(1, 2)
+        if (opcionBot == 1):
+            Movimiento2 = bot2.movimientoBot(grid, data3, data4, x, 3)
+            Movimiento2.movimiento()
+            inicioBot = Movimiento2.movimiento()
 
+        elif (opcionBot == 2):
+            path = findPath(grid, inicio, final, directions)
+            orig = path[0]
+            move = path[1]
+            # top
+            if orig[0] - move[0] == 2:
+                grid[orig[0] + 1][orig[1]] = 1
+            # bot
+            if orig[0] - move[0] == -2:
+                grid[orig[0] - 1][orig[1]] = 1
+            # right
+            if orig[1] - move[1] == -2:
+                grid[orig[0]][orig[1] + 1] = 1
+
+        turno = 3
+
+    if turno == 3:
+        opcionBot = random.randint(1, 2)
+        if (opcionBot == 1):
+            Movimiento3 = bot3.movimientoBot(grid, data5, data6, x, 6)
+            Movimiento3.movimiento()
+            inicioBot2 = Movimiento3.movimiento()
+
+        elif (opcionBot == 2):
+            percy = random.randint(1, 2)
+            if (percy == 1):
+                path = findPath(grid, inicio, final, directions)
+            if (percy == 2):
+                path = findPath(grid, inicioBot, finalBot, directions)
+            orig = path[0]
+            move = path[1]
+            # top
+            if orig[0] - move[0] == 2:
+                grid[orig[0] + 1][orig[1]] = 1
+            # bot
+            if orig[0] - move[0] == -2:
+                grid[orig[0] - 1][orig[1]] = 1
+            # right
+            if orig[1] - move[1] == -2:
+                grid[orig[0]][orig[1] + 1] = 1
+
+        turno = 1
 
     grid[6][0] = 2
     grid[6][12] = 2

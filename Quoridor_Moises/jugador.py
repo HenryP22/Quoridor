@@ -14,6 +14,7 @@ class movimientoJugador():
             return self.posicionJugador
         else:
             return self.posicionJugador
+
     def movimientoAbajo(self):
         if (self.posicionJugador[0] < 12):
             if (self.grid[self.posicionJugador[0] + 1][self.posicionJugador[1]] != 1 and self.grid[self.posicionJugador[0] + 1][self.posicionJugador[1]] != 4):
