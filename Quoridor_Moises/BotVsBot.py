@@ -18,34 +18,22 @@ LARGO = 50
 ALTO = 50
 MARGEN = 5
 x = 0
-grid = [
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-]
-inicio = (6, 0)
-finalBot = (6, 0)
-final = (6, 12)
-inicioBot = (6, 12)
 
-inicioBot2 = (0,6)
-finalBot2 = (12,6)
 
-inicioBot3 = (12,6)
-finalBot3 = (0,6)
+grid = [[0 for i in range(17)] for j in range(17)]
+inicio = (8, 0)
+finalBot = (8, 0)
+final = (8, 16)
+inicioBot = (8, 16)
+
+inicioBot2 = (0,8)
+finalBot2 = (16,8)
+
+inicioBot3 = (16,8)
+finalBot3 = (0,8)
 turno = 0
 pygame.init()
-DIMENSION_VENTANA = [600, 600]
+DIMENSION_VENTANA = [800, 800]
 pantalla = pygame.display.set_mode(DIMENSION_VENTANA)
 pygame.display.set_caption("Quoridor")
 hecho = False
@@ -63,19 +51,15 @@ def ValidMove(G, i, j, move):
     else:
         return True
 
-directionsTop = [(0, 2, 'right'), (-2, 0, 'top'), (2, 0, 'bot'), (0, -2, 'left')]
-directionsBot = [(0, 2, 'right'), (2, 0, 'bot'), (-2, 0, 'top'), (0, -2, 'left')]
-directions = directionsTop
+directionsRight = [(0, 2, 'right'), (-2, 0, 'top'), (2, 0, 'bot'), (0, -2, 'left')]
+directionsLeft = [(0, -2, 'left'),(2, 0, 'bot'), (-2, 0, 'top'), (0, 2, 'right')]
+directionsTop = [(-2, 0, 'top'), (0, 2, 'right'), (0, -2, 'left'),(2, 0, 'bot')]
+directionsBot =  [(2, 0, 'bot'), (0, -2, 'left'), (0, 2, 'right'),(-2, 0, 'top')]
 
 
 def findPath(G, start, end, directions):
     n = len(G)
-    visited = [[False for x in range(13)] for y in range(13)]
-
-    if start[0] == 0:
-        directions = directionsBot
-    if start[0] == 12:
-        directions = directionsTop
+    visited = [[False for x in range(17)] for y in range(17)]
 
     def dfs(i, j, move):
         if not ValidMove(G, i, j, move):
@@ -178,10 +162,10 @@ while not hecho:
                                               LARGO,
                                               ALTO])
                         ##primera columna
-                elif columna < 13:  ##columnas pares que no sea 0
+                elif columna < 17:  ##columnas pares que no sea 0
                     if fila % 2 != 0:
                         pygame.draw.rect(pantalla, color,
-                                         [(MARGEN + 40) * (columna) + MARGEN, (MARGEN + 40) * fila + MARGEN + 15, LARGO,
+                                     [(MARGEN + 40) * (columna) + MARGEN, (MARGEN + 40) * fila + MARGEN + 15, LARGO,
                                           20])
 
                     else:
@@ -199,7 +183,7 @@ while not hecho:
                         pygame.draw.rect(pantalla, color,
                                          [(MARGEN + LARGO) * (columna) + MARGEN + 5, (MARGEN + 40) * fila + MARGEN, 20,
                                           ALTO])
-                elif columna < 13:
+                elif columna < 17:
                     if fila % 2 != 0:
                         pygame.draw.rect(pantalla, color,
                                          [(MARGEN + 40) * (columna) + MARGEN + 15, (MARGEN + 40) * fila + MARGEN + 15,
@@ -240,7 +224,7 @@ while not hecho:
             Movimiento.movimiento()
             inicio = Movimiento.movimiento()
         elif (opcionBot == 2):
-            path = findPath(grid, inicioBot, finalBot, directions)
+            path = findPath(grid, inicioBot, finalBot, directionsRight)
             orig = path[0]
             move = path[1]
             # top
@@ -262,7 +246,7 @@ while not hecho:
             inicioBot = Movimiento2.movimiento()
 
         elif (opcionBot == 2):
-            path = findPath(grid, inicio, final, directions)
+            path = findPath(grid, inicio, final, directionsLeft)
             orig = path[0]
             move = path[1]
             # top
@@ -285,7 +269,7 @@ while not hecho:
             inicioBot2 = Movimiento3.movimiento()
 
         elif (opcionBot == 2):
-            path = findPath(grid, inicioBot3, finalBot3, directions)
+            path = findPath(grid, inicioBot3, finalBot3, directionsBot)
             orig = path[0]
             move = path[1]
             # top
@@ -308,7 +292,7 @@ while not hecho:
             inicioBot3 = Movimiento4.movimiento()
 
         elif (opcionBot == 2):
-            path = findPath(grid, inicioBot2, finalBot2, directions)
+            path = findPath(grid, inicioBot2, finalBot2, directionsTop)
             orig = path[0]
             move = path[1]
             # top
